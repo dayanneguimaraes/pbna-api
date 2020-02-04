@@ -25,9 +25,7 @@ CREATE TABLE conta(
 	id bigserial NOT NULL UNIQUE,
 	tipo_conta bigint NOT NULL,
 	valor decimal(300),
-	id_cliente bigserial NOT NULL,
-	CONSTRAINT PK_conta PRIMARY KEY (id),
-    CONSTRAINT FK_conta_cliente FOREIGN KEY (id_cliente) REFERENCES cliente(id)
+	CONSTRAINT PK_conta PRIMARY KEY (id)
 );
 
 Alter table cliente add foreign key (id_conta) references conta (id);
