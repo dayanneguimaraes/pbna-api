@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.pbna.entidade.Deposito;
+import br.com.pbna.entidade.Operacao;
 import br.com.pbna.negocio.DepositoNegocio;
 
 @RestController
@@ -19,7 +19,8 @@ public class DepositoRest {
 	private DepositoNegocio depositoNegocio;
 	
 	@PostMapping
-	public ResponseEntity<?> incluir(@RequestBody Deposito deposito) {
+	public ResponseEntity<?> incluir(@RequestBody Operacao deposito) {
+		
 		depositoNegocio.incluir(deposito);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

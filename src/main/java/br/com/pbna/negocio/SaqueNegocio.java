@@ -1,15 +1,15 @@
 package br.com.pbna.negocio;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.pbna.entidade.Saque;
-import br.com.pbna.repositories.ContaRepository;
+import br.com.pbna.entidade.Operacao;
+import br.com.pbna.enums.TipoOperacaoEnum;
+import br.com.pbna.enums.TipoTransacaoEnum;
 import br.com.pbna.repositories.SaqueRepository;
 
 @Service("saqueNegocio")
@@ -19,28 +19,31 @@ public class SaqueNegocio {
 	private SaqueRepository saqueRepository;
 	
 	@Autowired
-	private ContaRepository contaRepository;
+	private ContaNegocio contaNegocio;
 	
-	public Saque obter(Long id) {
-		return saqueRepository.findById(id).get();
-	}
 
-	public List<Saque> obterSaques() {
-		return saqueRepository.findAll();
-	}
-	
 	@Transactional
-	public void incluir(Saque saque) {
-		BigDecimal valorConta = this.contaRepository.obterValorContaPorId(saque.getConta().getId());
-		if (valorConta.compareTo(saque.getValor()) >= 0) {
-			saque.getConta().setValor(valorConta.subtract(saque.getValor()));
+	public void incluir(Operacao saque) {
+		
+		saque.setTipoOperacao(TipoOperacaoEnum.SAQUE);
+		saque.setTipoTransacao(TipoTransacaoEnum.DEBITO);
+		
+		BigDecimal valorConta = this.contaNegocio.obterValorContaPorChavePrimaria(saque.getConta().getChavePrimaria());
+		
+		if (valorConta != null && valorConta.compareTo(saque.getValor()) >= 0) {
+			
+			BigDecimal valorAtualizado = valorConta.subtract(saque.getValor());
+			this.contaNegocio.atualizarValorConta(valorAtualizado, saque.getConta().getChavePrimaria());
+			saque.setSaldoConta(valorAtualizado);
+			
 			this.saqueRepository.save(saque);
 		} else {
+			throw new IllegalStateException("Saldo da conta não é suficiente.");
 		}
 	}
 	
 	@Transactional
-	public void alterar(Saque saque) {
+	public void alterar(Operacao saque) {
 		this.saqueRepository.save(saque);
 	}
 	

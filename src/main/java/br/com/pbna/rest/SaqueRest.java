@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.pbna.entidade.Saque;
+import br.com.pbna.entidade.Operacao;
 import br.com.pbna.negocio.SaqueNegocio;
 
 @RestController
@@ -19,9 +19,15 @@ public class SaqueRest {
 	private SaqueNegocio saqueNegocio;
 	
 	@PostMapping
-	public ResponseEntity<?> incluir(@RequestBody Saque saque) {
-		saqueNegocio.incluir(saque);
-		return new ResponseEntity<>(HttpStatus.OK);
+	public ResponseEntity<?> incluir(@RequestBody Operacao saque) {
+		try {
+			
+			saqueNegocio.incluir(saque);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
 	}
 	
 }

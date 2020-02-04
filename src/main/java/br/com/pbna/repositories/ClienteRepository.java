@@ -7,4 +7,6 @@ import br.com.pbna.entidade.Cliente;
 
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
+	
+	
 }

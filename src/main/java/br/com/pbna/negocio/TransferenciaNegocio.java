@@ -1,14 +1,13 @@
 package br.com.pbna.negocio;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.pbna.entidade.Transferencia;
+import br.com.pbna.dto.TransferenciaDTO;
 import br.com.pbna.repositories.TransferenciaRepository;
 
 @Service("transferenciaNegocio")
@@ -20,35 +19,21 @@ public class TransferenciaNegocio {
 	@Autowired
 	private ContaNegocio contaNegocio;
 	
-	public Transferencia obter(Long id) {
-		return transferenciaRepository.findById(id).get();
-	}
-
-	public List<Transferencia> obterTransferencias() {
-		return transferenciaRepository.findAll();
-	}
-	
 	@Transactional
-	public void incluir(Transferencia transferencia) {
-		BigDecimal valorConta = this.contaNegocio.obterValorContaPorId(transferencia.getConta().getId());
+	public void incluir(TransferenciaDTO transferencia) {
+		BigDecimal valorContaeOrigem = this.contaNegocio.obterValorContaPorChavePrimaria(transferencia.getContaOrigem().getChavePrimaria());
+		BigDecimal valorContaDestino = this.contaNegocio.obterValorContaPorChavePrimaria(transferencia.getContaDestino().getChavePrimaria());
 		
-		if (valorConta.compareTo(transferencia.getValor()) >= 0) {
-			transferencia.getConta().setValor(valorConta.subtract(transferencia.getValor()));
-			this.transferenciaRepository.save(transferencia);
+		if (valorContaeOrigem != null && valorContaeOrigem.compareTo(transferencia.getValor()) >= 0) {
+			
+			this.contaNegocio.atualizarValorConta(valorContaeOrigem.subtract(transferencia.getValor()), transferencia.getContaOrigem().getChavePrimaria());
+			this.contaNegocio.atualizarValorConta(valorContaDestino.add(transferencia.getValor()), transferencia.getContaDestino().getChavePrimaria());
+			
+			this.transferenciaRepository.saveAll(transferencia.createOperacoesTransferencia(transferencia, valorContaeOrigem, valorContaDestino));
 		} else {
+			throw new IllegalStateException("Saldo da conta não é suficiente.");
 		}
 		
 	}
 	
-	@Transactional
-	public void alterar(Transferencia transferencia) {
-		this.transferenciaRepository.save(transferencia);
-	}
-	
-	@Transactional
-	public void excluir(Long id) {
-		this.transferenciaRepository.deleteById(id);
-	}
-
-
 }

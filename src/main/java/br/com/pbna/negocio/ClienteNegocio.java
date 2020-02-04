@@ -16,6 +16,9 @@ public class ClienteNegocio {
 	@Autowired
 	private ClienteRepository clienteRepository;
 	
+	@Autowired
+	private ContaNegocio contaNegocio;
+	
 	public Cliente obter(Long id) {
 		return this.clienteRepository.findById(id).get();
 	}
@@ -26,11 +29,14 @@ public class ClienteNegocio {
 	
 	@Transactional
 	public void incluir(Cliente cliente) {
+		cliente.getConta().getChavePrimaria().setId(this.contaNegocio.gerarNumeroSequencial());
 		this.clienteRepository.save(cliente);
 	}
 	
 	@Transactional
 	public void alterar(Cliente cliente) {
+		this.contaNegocio.atualizarTipoConta(cliente.getConta().getChavePrimaria().getTipoConta(), cliente.getConta().getChavePrimaria());
+		
 		this.clienteRepository.save(cliente);
 	}
 	

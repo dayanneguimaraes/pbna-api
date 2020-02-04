@@ -1,14 +1,15 @@
 package br.com.pbna.negocio;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.pbna.entidade.Deposito;
+import br.com.pbna.entidade.Operacao;
+import br.com.pbna.enums.TipoOperacaoEnum;
+import br.com.pbna.enums.TipoTransacaoEnum;
 import br.com.pbna.repositories.DepositoRepository;
 
 @Service("depositoNegocio")
@@ -20,23 +21,24 @@ public class DepositoNegocio {
 	@Autowired
 	private ContaNegocio contaNegocio;
 	
-	public Deposito obter(Long id) {
-		return depositoRepository.findById(id).get();
-	}
-
-	public List<Deposito> obterDepositos() {
-		return depositoRepository.findAll();
-	}
-	
 	@Transactional
-	public void incluir(Deposito deposito) {
-		BigDecimal valor = contaNegocio.obterValorContaPorId(deposito.getConta().getId());
-		deposito.getConta().setValor(valor.add(deposito.getValor()));
+	public void incluir(Operacao deposito) {
+		deposito.setTipoOperacao(TipoOperacaoEnum.DEPOSITO);
+		deposito.setTipoTransacao(TipoTransacaoEnum.CREDITO);
+		
+		BigDecimal valor = contaNegocio.obterValorContaPorChavePrimaria(deposito.getConta().getChavePrimaria());
+		BigDecimal valorAtualizado = deposito.getValor();
+		
+		if  (valor != null) {
+			valorAtualizado = valor.add(deposito.getValor());
+		}
+		deposito.setSaldoConta(valorAtualizado);
+		this.contaNegocio.atualizarValorConta(valorAtualizado, deposito.getConta().getChavePrimaria());
 		this.depositoRepository.save(deposito);
 	}
 	
 	@Transactional
-	public void alterar(Deposito deposito) {
+	public void alterar(Operacao deposito) {
 		this.depositoRepository.save(deposito);
 	}
 	

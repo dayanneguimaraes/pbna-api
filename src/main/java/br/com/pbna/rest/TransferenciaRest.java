@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.pbna.entidade.Transferencia;
+import br.com.pbna.dto.TransferenciaDTO;
 import br.com.pbna.negocio.TransferenciaNegocio;
 
 @RestController
@@ -19,9 +19,14 @@ public class TransferenciaRest {
 	private TransferenciaNegocio transferenciaNegocio;
 	
 	@PostMapping
-	public ResponseEntity<?> incluir(@RequestBody Transferencia transferencia) {
-		transferenciaNegocio.incluir(transferencia);
-		return new ResponseEntity<>(HttpStatus.OK);
+	public ResponseEntity<?> incluir(@RequestBody TransferenciaDTO transferencia) {
+		
+		try {
+			transferenciaNegocio.incluir(transferencia);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 }
