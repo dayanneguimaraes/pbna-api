@@ -5,7 +5,11 @@ import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.pbna.entidade.pk.ContaPK;
 
@@ -20,6 +24,11 @@ public class Conta extends SuperEntity<ContaPK> {
     
     @Column 
     private BigDecimal valor;      
+    
+    @ManyToOne
+    @JoinColumn(name = "id_cliente")
+    @JsonIgnore
+    private Cliente cliente;
     
 	public Conta(ContaPK chavePrimaria) {
 		this.setChavePrimaria(chavePrimaria);
@@ -48,4 +57,13 @@ public class Conta extends SuperEntity<ContaPK> {
 	public ContaPK getId() {
 		return chavePrimaria;
 	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+	
 }

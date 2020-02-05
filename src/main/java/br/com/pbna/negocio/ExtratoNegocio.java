@@ -16,9 +16,6 @@ public class ExtratoNegocio {
 	@Autowired
 	private OperacaoRepository operacaoRepository;
 	
-	@Autowired
-	private ContaNegocio contaNegocio;
-	
 	public List<Operacao> obterOperacoesPorChavePrimaria(ContaPK contaPK) {
 		return operacaoRepository.findByConta(new Conta(contaPK));
 	}

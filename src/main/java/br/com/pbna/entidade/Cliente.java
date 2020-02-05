@@ -1,5 +1,7 @@
 package br.com.pbna.entidade;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -36,9 +38,8 @@ public class Cliente extends SuperEntity<Long> {
     @Column(length = 20)
     private String telefone;  
     
-    @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumns({@JoinColumn(name = "id_conta"), @JoinColumn(name = "tipo_conta")})
-    private Conta conta;
+    @OneToMany(mappedBy = "cliente" )
+    private List<Conta> contas;
     
     @ManyToOne
     @JoinColumn(name = "id_agencia")
@@ -49,6 +50,12 @@ public class Cliente extends SuperEntity<Long> {
 	}
 
 	public Cliente() {
+	}
+	
+	public Cliente(Long id, String nome) {
+		super();
+		this.id = id;
+		this.nome = nome;
 	}
 
 	public Long getId() {
@@ -91,20 +98,20 @@ public class Cliente extends SuperEntity<Long> {
 		this.telefone = telefone;
 	}
 
-	public Conta getConta() {
-		return conta;
-	}
-
-	public void setConta(Conta conta) {
-		this.conta = conta;
-	}
-
 	public Agencia getAgencia() {
 		return agencia;
 	}
 
 	public void setAgencia(Agencia agencia) {
 		this.agencia = agencia;
+	}
+
+	public List<Conta> getContas() {
+		return contas;
+	}
+
+	public void setContas(List<Conta> contas) {
+		this.contas = contas;
 	}	
 	
 }

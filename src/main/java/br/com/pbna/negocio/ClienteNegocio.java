@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.pbna.entidade.Cliente;
+import br.com.pbna.entidade.Conta;
 import br.com.pbna.repositories.ClienteRepository;
 
 @Service("clienteNegocio")
@@ -29,14 +30,19 @@ public class ClienteNegocio {
 	
 	@Transactional
 	public void incluir(Cliente cliente) {
-		cliente.getConta().getChavePrimaria().setId(this.contaNegocio.gerarNumeroSequencial());
+		List<Conta> contas = cliente.getContas();
+		
 		this.clienteRepository.save(cliente);
+		
+		contas.forEach(item -> {
+			item.getChavePrimaria().setId(contaNegocio.gerarNumeroSequencial());
+			item.setCliente(cliente);
+		});
+		this.contaNegocio.incluir(contas);
 	}
 	
 	@Transactional
 	public void alterar(Cliente cliente) {
-		this.contaNegocio.atualizarTipoConta(cliente.getConta().getChavePrimaria().getTipoConta(), cliente.getConta().getChavePrimaria());
-		
 		this.clienteRepository.save(cliente);
 	}
 	

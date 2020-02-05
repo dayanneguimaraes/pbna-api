@@ -5,8 +5,6 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Embeddable;
-import javax.persistence.GeneratedValue;
-import javax.persistence.SequenceGenerator;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -21,8 +19,6 @@ public class ContaPK implements Serializable {
 
 	private static final long serialVersionUID = 6217271752661700394L;
 
-	@SequenceGenerator(name = "sequencialConta", sequenceName = "conta_id_seq", allocationSize = 1)	
-    @GeneratedValue(generator = "sequencialConta")
 	private Long id;
 	
     @Column

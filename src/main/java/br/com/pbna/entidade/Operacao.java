@@ -52,7 +52,7 @@ public class Operacao extends SuperEntity<Long> {
     @Convert(converter = TipoOperacaoConverter.class)
     @JsonSerialize(using = TipoOperacaoSerializer.class)
     @JsonDeserialize(using = TipoContaDeserializer.class)
-    private TipoOperacaoEnum TipoOperacao;
+    private TipoOperacaoEnum tipoOperacao;
     
     @Column
     @Convert(converter = TipoTransacaoConverter.class)
@@ -85,11 +85,11 @@ public class Operacao extends SuperEntity<Long> {
 	}
 
 	public TipoOperacaoEnum getTipoOperacao() {
-		return TipoOperacao;
+		return tipoOperacao;
 	}
 
 	public void setTipoOperacao(TipoOperacaoEnum tipoOperacao) {
-		TipoOperacao = tipoOperacao;
+		this.tipoOperacao = tipoOperacao;
 	}
 
 	public Date getData() {

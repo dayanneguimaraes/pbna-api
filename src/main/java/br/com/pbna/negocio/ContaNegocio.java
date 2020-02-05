@@ -1,6 +1,7 @@
 package br.com.pbna.negocio;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -35,8 +36,8 @@ public class ContaNegocio {
 	}
 	
 	@Transactional
-	public void incluir(Conta conta) {
-		this.contaRepository.save(conta);
+	public void incluir(List<Conta> contas) {
+		this.contaRepository.saveAll(contas);
 	}
 
 }

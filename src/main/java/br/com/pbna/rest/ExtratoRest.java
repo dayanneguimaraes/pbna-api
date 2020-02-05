@@ -33,10 +33,10 @@ public class ExtratoRest {
 		return new ResponseEntity<>(extratoNegocio.obterOperacoesPorChavePrimaria(new ContaPK(id, tipoConta)), HttpStatus.OK);
 	}
 	
-	@GetMapping("/obter-valor-conta")
-	public ResponseEntity<BigDecimal> obterValorContaPorChavePrimaria(ContaPK chavePrimaria) {
+	@GetMapping("/obter-valor-conta/{id}/{tipoConta}")
+	public ResponseEntity<BigDecimal> obterValorContaPorChavePrimaria(@PathVariable("id") Long id, @PathVariable("tipoConta") Long tipoConta) {
 		
-		return new ResponseEntity<>(contaNegocio.obterValorContaPorChavePrimaria(chavePrimaria), HttpStatus.OK);
+		return new ResponseEntity<>(contaNegocio.obterValorContaPorChavePrimaria(new ContaPK(id, tipoConta)), HttpStatus.OK);
 	}
 }
 
