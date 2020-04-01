@@ -1,6 +1,7 @@
 package br.com.pbna.repositories;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -28,5 +29,9 @@ public interface ContaRepository extends JpaRepository<Conta, ContaPK> {
 	@Modifying
 	@Query("update Conta c set c.chavePrimaria.tipoConta = :tipoConta where c.chavePrimaria = :chavePrimaria")
 	void atualizarTipoConta(@Param("tipoConta") TipoContaEnum tipoConta, @Param("chavePrimaria") ContaPK chavePrimaria);
+	
+	List<Conta> findByChavePrimaria_tipoConta(TipoContaEnum tipoContaEnum);
+
+	Conta findByChavePrimaria(ContaPK conta);
 	
 }

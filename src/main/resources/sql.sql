@@ -15,8 +15,6 @@ CREATE TABLE cliente(
 	endereco varchar(300),
 	telefone varchar(20),
 	id_agencia bigserial NOT NULL,
-	--id_conta bigserial NOT NULL,
-	--tipo_conta bigint NOT NULL,
 	CONSTRAINT PK_cliente PRIMARY KEY (id),
     CONSTRAINT FK_cliente_agencia FOREIGN KEY (id_agencia) REFERENCES agencia(id)
 );
@@ -27,11 +25,9 @@ CREATE TABLE conta(
 	tipo_conta bigint NOT NULL,
 	valor decimal(300, 2),
 	id_cliente bigserial NOT NULL,
-	CONSTRAINT PK_conta PRIMARY KEY (id, tipo_conta)
+	CONSTRAINT PK_conta PRIMARY KEY (id, tipo_conta),
 	CONSTRAINT FK_conta_cliente FOREIGN KEY (id_cliente) REFERENCES cliente(id)
 );
-
---Alter table cliente add foreign key (id_conta) references conta (id);
 
 
 /** Operação **/

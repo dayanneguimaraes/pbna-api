@@ -2,10 +2,9 @@ package br.com.pbna.negocio;
 
 import java.math.BigDecimal;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.pbna.entidade.Operacao;
 import br.com.pbna.enums.TipoOperacaoEnum;

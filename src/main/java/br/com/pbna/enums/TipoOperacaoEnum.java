@@ -4,7 +4,8 @@ public enum TipoOperacaoEnum {
 	
 	DEPOSITO(1L, "Depósito"),
 	SAQUE(2L, "Saque"),
-	TRANSFERENCIA(3L, "Transferência");
+	TRANSFERENCIA(3L, "Transferência"),
+	RENDIMENTO_POUPANCA(4L, "Rendimento da Poupança");
 	
 	private final Long codigo;
 	private final String nome;
